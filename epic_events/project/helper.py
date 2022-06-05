@@ -7,3 +7,5 @@ def custom_titled_filter(title):
             instance.title = title
             return instance
     return Wrapper
+
+    
