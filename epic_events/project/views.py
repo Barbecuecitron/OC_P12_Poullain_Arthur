@@ -14,14 +14,14 @@ class PermBasedViewSet(viewsets.ModelViewSet):
     def __init__(self, *args, **kwargs):
 
         self.viewing_actions = ["list", "retrieve"]
-        self.modifying_actions = ["create", "update", "partial_update","destroy"]
+        self.modifying_actions = ["update", "partial_update","destroy"]
         self.can_view_if_or = self.can_view_if_or
-        self.can_cud_if_or = self.can_cud_if_or
-        
+        self.can_update_or_delete = self.can_update_or_delete
+        self.can_create = self.can_create
         
         self.can_view_if_or.append(IsAdminUser)
-        self.can_cud_if_or.append(IsAdminUser)
-
+        self.can_update_or_delete.append(IsAdminUser)
+        self.can_create.append(IsAdminUser)
     
     def get_permissions(self):
 
@@ -32,6 +32,14 @@ class PermBasedViewSet(viewsets.ModelViewSet):
             If None of our conditions are met, it will return our default permission (IsAuthenticated)
         """
         
+        if self.action == "create":
+            for perm in self.can_create:
+                if perm.has_permission(self.request, self.request, self):
+                    print("La permission suivante est vraie :")
+                    print(perm, self.request.user.has_perm(self.request.user, perm))
+                    return [perm()]
+            return [AlwaysFalse()]
+
         if self.action in self.viewing_actions: 
             for perm in self.can_view_if_or:
                 if perm.has_permission(self.request, self.request, self):
@@ -41,7 +49,7 @@ class PermBasedViewSet(viewsets.ModelViewSet):
             return [AlwaysFalse()]  
 
         elif self.action in self.modifying_actions:
-            for perm in self.can_cud_if_or:
+            for perm in self.can_update_or_delete:
                 if perm.has_permission(self.request, self.request, self):
                     print("La permission suivante est vraie :")
                     print(perm, self.request.user.has_perm(self.request.user, perm))

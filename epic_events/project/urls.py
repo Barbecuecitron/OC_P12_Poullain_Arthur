@@ -17,14 +17,11 @@ from django.contrib import admin
 #  from dj_rest_auth.urls import login
 from django.urls import include, path
 from .router import *
-from dj_rest_auth.views import (
-    LoginView, LogoutView)
-
+from dj_rest_auth.views import LogoutView
+# from rest_framework.urls import LoginView
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", LoginView.as_view(), name='rest_login'),
-    path("login/", LoginView.as_view(), name='rest_login'),
+    path('', include('rest_framework.urls', namespace='rest_framework')),
     path("", include(router.urls)),
-
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path("logout/", LogoutView.as_view(), name="logout" )
 ]

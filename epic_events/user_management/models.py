@@ -1,3 +1,4 @@
+from datetime import date
 from django.db import models
 # Create your models here.
 from django.db import models
@@ -5,7 +6,6 @@ from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
 from django.utils.translation import gettext_lazy as _
-# from django.contrib.auth.admin import UserAdmin
 
 class User_Model_Manager(BaseUserManager):
     def create_user(self, email, date_of_birth, password=None):
@@ -13,6 +13,7 @@ class User_Model_Manager(BaseUserManager):
         Creates and saves a User with the given email, date of
         birth and password.
         """
+        
         if not email:
             raise ValueError('Users must have an email address')
 
@@ -22,21 +23,22 @@ class User_Model_Manager(BaseUserManager):
         )
 
         user.set_password(password)
-        user.save(using=self._db)
+        user.save()
         return user
 
-    def create_superuser(self, email, date_of_birth, password=None):
+    def create_superuser(self, email, date_of_birth=None, password=None):
         """
         Creates and saves a superuser with the given email, date of
         birth and password.
         """
+
         user = self.create_user(
             email,
             password=password,
             date_of_birth=date_of_birth,
         )
         user.is_admin = True
-        user.save(using=self._db)
+        user.save()
         return user
 
 
@@ -57,7 +59,7 @@ class User_Model(AbstractBaseUser):
         UserGroup, max_length=15, choices=UserGroup.choices, default=UserGroup.DEFAULT
     )
 
-    date_of_birth = models.DateField()
+    date_of_birth = models.DateField(default=date.today)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 

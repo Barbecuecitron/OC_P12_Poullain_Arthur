@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'user_management.User_Model'
 
 # Application definition
 
@@ -45,8 +46,12 @@ INSTALLED_APPS = [
     'apps.events',
     'apps.clients'
 ]
+LOGIN_REDIRECT_URL = "/clients/"
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
         "rest_framework.permissions.IsAuthenticated"
     ]
@@ -147,4 +152,3 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'user_management.User_Model'

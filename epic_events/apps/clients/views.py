@@ -3,7 +3,7 @@ from project.views import PermBasedViewSet
 from .models import Client 
 from .serializers import ClientSerializer
 from project.views import PermBasedViewSet
-from project.permissions import IsSale, IsSupport, CanViewClients, CanEditClient
+from project.permissions import IsSale, IsSupport, CanViewClients, CanEditClient, CanCreateClient
 
 # Create your views here.
 
@@ -14,7 +14,8 @@ class ClientViewSet(PermBasedViewSet):
 
     def __init__(self, *args, **kwargs):
         self.can_view_if_or = [CanViewClients]
-        self.can_cud_if_or = [CanEditClient]
+        self.can_update_or_delete = [CanEditClient]
+        self.can_create = [CanCreateClient]
         super().__init__()
 
     def get_permissions(self):
