@@ -3,8 +3,8 @@ from .models import Contract
 # Register your models here.
 class ContractAdmin(admin.ModelAdmin):
     
-    list_display = ("contract_info","sales_contact")
+    list_display = ("contract_info","sales_contact", "status")
     def contract_info(self, obj):
         return obj
-
+        
 admin.site.register(Contract, ContractAdmin)
