@@ -1,21 +1,21 @@
 from datetime import date
 from django.db import models
+
 # Create your models here.
 from django.db import models
-from django.contrib.auth.models import (
-    BaseUserManager, AbstractBaseUser
-)
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.utils.translation import gettext_lazy as _
 
-class User_Model_Manager(BaseUserManager):
+
+class UserModelManager(BaseUserManager):
     def create_user(self, email, date_of_birth, password=None):
         """
         Creates and saves a User with the given email, date of
         birth and password.
         """
-        
+
         if not email:
-            raise ValueError('Users must have an email address')
+            raise ValueError("Users must have an email address")
 
         user = self.model(
             email=self.normalize_email(email),
@@ -42,9 +42,9 @@ class User_Model_Manager(BaseUserManager):
         return user
 
 
-class User_Model(AbstractBaseUser):
+class UserModel(AbstractBaseUser):
     email = models.EmailField(
-        verbose_name='email address',
+        verbose_name="email address",
         max_length=255,
         unique=True,
     )
@@ -59,13 +59,13 @@ class User_Model(AbstractBaseUser):
         UserGroup, max_length=15, choices=UserGroup.choices, default=UserGroup.DEFAULT
     )
 
-    date_of_birth = models.DateField(default=date.today)
+    date_of_birth = models.DateField(default=date.today, null=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
-    objects = User_Model_Manager()
+    objects = UserModelManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
 
     class Meta:
         verbose_name = "User"

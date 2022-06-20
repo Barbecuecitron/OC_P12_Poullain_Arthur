@@ -8,18 +8,22 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
-from user_management.models import User_Model
+from user_management.models import UserModel
 from project.helper import custom_titled_filter
+
 
 class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
     fields, plus a repeated password."""
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+
+    password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label="Password confirmation", widget=forms.PasswordInput
+    )
 
     class Meta:
-        model = User_Model
-        fields = ('email', 'date_of_birth')
+        model = UserModel
+        fields = ("email", "date_of_birth")
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -43,11 +47,12 @@ class UserChangeForm(forms.ModelForm):
     the user, but replaces the password field with admin's
     disabled password hash display field.
     """
+
     password = ReadOnlyPasswordHashField()
 
     class Meta:
-        model = User_Model
-        fields = ('email', 'password', 'date_of_birth', 'is_active')
+        model = UserModel
+        fields = ("email", "password", "date_of_birth", "is_active")
 
 
 class UserAdmin(BaseUserAdmin):
@@ -58,34 +63,42 @@ class UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('email', 'date_of_birth')
+    list_display = ("email", "date_of_birth")
     list_filter = (
         # 'is_admin', 'usergroup'
-        ('usergroup', custom_titled_filter('My Custom Title')),
-        )
+        ("usergroup", custom_titled_filter("My Custom Title")),
+    )
 
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('date_of_birth',)}),
-        ('Permissions', {'fields': ('is_admin',)}),
-        ('Role assignment', {'fields':('usergroup',)}),
+        (None, {"fields": ("email", "password")}),
+        ("Personal info", {"fields": ("date_of_birth",)}),
+        ("Permissions", {"fields": ("is_admin",)}),
+        ("Role assignment", {"fields": ("usergroup",)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
     add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('email', 'date_of_birth', 'password1', 'password2'), #ICI QUE LA MAGIE OPERE
-        }),
-        ('Role assignment', {'fields':('usergroup',)})
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": (
+                    "email",
+                    "date_of_birth",
+                    "password1",
+                    "password2",
+                ),  # ICI QUE LA MAGIE OPERE
+            },
+        ),
+        ("Role assignment", {"fields": ("usergroup",)}),
     )
-    search_fields = ('email',)
-    ordering = ('email',)
+    search_fields = ("email",)
+    ordering = ("email",)
     filter_horizontal = ()
 
 
 # Now register the new UserAdmin...
-admin.site.register(User_Model, UserAdmin)
+admin.site.register(UserModel, UserAdmin)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 admin.site.unregister(Group)
