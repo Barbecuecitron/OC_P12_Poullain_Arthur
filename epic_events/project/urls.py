@@ -16,19 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from .router import *
-from dj_rest_auth.views import LogoutView
-from dj_rest_auth.urls import LoginView
+
+# from dj_rest_auth.views import LogoutView
+# from dj_rest_auth.urls import LoginView
 from dj_rest_auth.urls import *
 from rest_framework.authtoken import views
 
 # from rest_framework.urls import LoginView
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("login/", views.obtain_auth_token, name="api-token-auth"),
     path("", include("rest_framework.urls", namespace="rest_framework")),
     path("", include(router.urls)),
-    path("api-token-auth/", views.obtain_auth_token, name="api-token-auth")
-    # path("logout/", LogoutView.as_view(), name="logout"),
-    # path("login/", LoginView.as_view(), name="Login"),
-    # path("api/", include("dj_rest_auth.urls"))
-    # path("api-token-auth/", views.obtain_auth_token),
 ]
