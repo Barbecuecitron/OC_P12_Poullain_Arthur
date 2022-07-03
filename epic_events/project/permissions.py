@@ -1,10 +1,10 @@
 from rest_framework import permissions
 from user_management.models import UserModel
-from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import IsAdminUser
 
-# viewing_actions = ["list", "retrieve"]
-# modifying_actions = ["create", ""]
+
+class IsManagement(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.usergroup == UserModel.UserGroup.MANAGEMENT
 
 
 class CanViewClients(permissions.BasePermission):
@@ -30,8 +30,3 @@ class CanEditClient(permissions.BasePermission):
         if request.user.usergroup == UserModel.UserGroup.SALE:
             return obj.sales_contact == request.user
         return request.user.usergroup == UserModel.UserGroup.MANAGEMENT
-
-
-class AlwaysFalse(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return False

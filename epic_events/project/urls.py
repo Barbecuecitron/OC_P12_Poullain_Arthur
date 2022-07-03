@@ -26,6 +26,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("rest_framework.urls", namespace="rest_framework")),
     path("", include(router.urls)),
+    path("api-token-auth/", views.obtain_auth_token, name="api-token-auth")
     # path("logout/", LogoutView.as_view(), name="logout"),
     # path("login/", LoginView.as_view(), name="Login"),
     # path("api/", include("dj_rest_auth.urls"))

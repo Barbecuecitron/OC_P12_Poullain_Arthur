@@ -8,8 +8,8 @@ from rest_framework.permissions import IsAdminUser
 from project.permissions import (
     CanViewClients,
     CanCreateClient,
-    AlwaysFalse,
     CanEditClient,
+    IsManagement,
 )
 
 
@@ -21,24 +21,15 @@ class ClientViewSet(viewsets.ModelViewSet):
     def __init__(self, *args, **kwargs):
         super().__init__()
 
-    # def get_queryset(self):
-    #     if self.request.user.UserGroup == "UserModel.UserGroup.SALE":
-    #         queryset = Client.objects.filter(sales_contact=self.request.user)
-    #     else:
-    #         queryset = []
-    #     return queryset
-
     def get_permissions(self):
-        if self.action in ("list",):
+        if self.action in ("list", "retrieve"):
             permission_classes = [CanViewClients]
-        elif self.action in ("create", "retrieve"):
+        elif self.action in ("create"):
             permission_classes = [CanCreateClient]
         elif self.action in ("update", "partial_update"):
             permission_classes = [CanEditClient]
         else:
             print("Methode refusées:")
             print(self.action)
-            permission_classes = [AlwaysFalse]
+            permission_classes = [IsManagement]
         return [permission() for permission in permission_classes]
-
-    # return super().get_permissions()
