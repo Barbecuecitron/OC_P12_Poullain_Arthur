@@ -1,5 +1,6 @@
 from rest_framework import permissions
 from user_management.models import UserModel
+import logging
 
 
 class IsManagement(permissions.BasePermission):
@@ -9,10 +10,15 @@ class IsManagement(permissions.BasePermission):
 
 class CanViewClients(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.user.usergroup in (UserModel.UserGroup.MANAGEMENT,)
+        return request.user.usergroup in (
+            UserModel.UserGroup.MANAGEMENT,
+            UserModel.UserGroup.SALE,
+        )
 
     def has_object_permission(self, request, view, obj):
+        logging.debug("Object permission")
         if request.user.usergroup == UserModel.UserGroup.SALE:
+            logging.debug(obj.sales_contact == request.user)
             return obj.sales_contact == request.user
         return request.user.usergroup == UserModel.UserGroup.MANAGEMENT
 

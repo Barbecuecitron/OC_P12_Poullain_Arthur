@@ -44,16 +44,15 @@ INSTALLED_APPS = [
     "apps.contracts",
     "apps.events",
     "apps.clients",
+    "django_filters",
 ]
 # LOGIN_REDIRECT_URL = "/clients/"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        # "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.TokenAuthentication",
-        # "rest_framework.authentication.SessionAuthentication",
-        # "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
     ],
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
 }
 
