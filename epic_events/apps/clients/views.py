@@ -1,8 +1,10 @@
+from inspect import Attribute
 from rest_framework import viewsets
 
 # from project.permissions import CanEditClient
 from .models import Client
 from user_management.models import UserModel
+
 from .serializers import ClientSerializer
 from rest_framework.permissions import IsAdminUser
 from project.permissions import (
@@ -18,22 +20,18 @@ from django_filters.rest_framework import DjangoFilterBackend
 class ClientViewSet(viewsets.ModelViewSet):
 
     serializer_class = ClientSerializer
-    queryset = Client.objects.all()
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ("id",)
+    # queryset = Client.objects.all()
+    # filter_backends = [DjangoFilterBackend]
+    filterset_fields = ("id", "first_name", "last_name", "email")
 
     def get_queryset(self):
-        print("Get queryset est appelé")
         """
-        Filterset_fields and foreign keys seem to be really unstable within ModelViewsets.
-        We will instead manually retrieve passed-in URL parameters, and apply them as filters on the queryset,
-        to get full control on whats going on. 
+        SALE Users can only access their own clients
         """
-        queryset = Client.objects.all()
-        url_sales_contact = self.request.query_params.get("sales_contact")
-        if url_sales_contact is not None:
-            queryset = queryset.filter(sales_contact__email=url_sales_contact)
-        return queryset
+        if self.request.user.usergroup == UserModel.UserGroup.SALE:
+            return Client.objects.filter(sales_contact=self.request.user)
+
+        return Client.objects.all()
 
     def get_permissions(self):
 

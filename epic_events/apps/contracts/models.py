@@ -7,10 +7,8 @@ from datetime import datetime
 class Contract(models.Model):
     client = models.ForeignKey(
         to=Client,
-        null=True,
         blank=False,
-        on_delete=models.SET_NULL,
-        # limit_choices_to={"usergroup": "Sale"},
+        on_delete=models.CASCADE,
     )
 
     sales_contact = models.ForeignKey(

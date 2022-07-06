@@ -3,6 +3,7 @@ from user_management.models import UserModel
 import logging
 
 
+
 class IsManagement(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.usergroup == UserModel.UserGroup.MANAGEMENT
