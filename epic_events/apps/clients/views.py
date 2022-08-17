@@ -14,20 +14,18 @@ from project.permissions import (
     IsManagement,
 )
 
-from django_filters.rest_framework import DjangoFilterBackend
-
 
 class ClientViewSet(viewsets.ModelViewSet):
 
     serializer_class = ClientSerializer
-    # queryset = Client.objects.all()
-    # filter_backends = [DjangoFilterBackend]
     filterset_fields = ("id", "first_name", "last_name", "email")
 
     def get_queryset(self):
+
         """
         SALE Users can only access their own clients
         """
+
         if self.request.user.usergroup == UserModel.UserGroup.SALE:
             return Client.objects.filter(sales_contact=self.request.user)
 

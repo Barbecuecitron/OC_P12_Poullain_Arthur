@@ -20,7 +20,7 @@ class Event(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        limit_choices_to={"team": UserModel.UserGroup.SUPPORT},
+        limit_choices_to={"usergroup": UserModel.UserGroup.SUPPORT},
     )
     event_status = models.BooleanField(default=False, verbose_name="Completed")
     attendees = models.PositiveIntegerField()

@@ -3,6 +3,8 @@ from apps.contracts.models import Contract
 from apps.contracts.serializers import ContractSerializer
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from project.permissions import ContractPermissions
+from user_management.models import UserModel
 
 
 class ContractViewSet(viewsets.ModelViewSet):
@@ -10,6 +12,9 @@ class ContractViewSet(viewsets.ModelViewSet):
     serializer_class = ContractSerializer
 
     filter_backends = [SearchFilter, DjangoFilterBackend]
+
+    permission_classes = [ContractPermissions]
+
     search_fields = [
         "^client__first_name",
         "^client__last_name",
@@ -24,12 +29,8 @@ class ContractViewSet(viewsets.ModelViewSet):
     }
 
     def get_queryset(self):
-        contracts = Contract.objects.all()
-
-        # uid = self.kwargs.get(self.lookup_url_kwarg)
-        # contracts = Contract.objects.filter(client_id=uid)
-        # contracts = Contract.objects.filter()
-        return contracts
-
-    def get_permissions(self):
-        return super().get_permissions()
+        if self.request.user.usergroup == UserModel.UserGroup.SUPPORT:
+            return Contract.objects.filter(event__support_contact=self.request.user)
+        elif self.request.user.usergroup == UserModel.UserGroup.SALE:
+            return Contract.objects.filter(sales_contact=self.request.user)
+        return []
