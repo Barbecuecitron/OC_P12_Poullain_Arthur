@@ -17,12 +17,9 @@ from django.contrib import admin
 from django.urls import include, path
 from .router import *
 
-# from dj_rest_auth.views import LogoutView
-# from dj_rest_auth.urls import LoginView
 from dj_rest_auth.urls import *
 from rest_framework.authtoken import views
 
-# from rest_framework.urls import LoginView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("login/", views.obtain_auth_token, name="api-token-auth"),

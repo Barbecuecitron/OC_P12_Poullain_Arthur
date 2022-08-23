@@ -18,6 +18,7 @@ class Client(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={"usergroup": "Sale"},
     )
+    is_prospect = models.BooleanField(blank=True, default=True)
 
     def __str__(self):
         return self.company_name

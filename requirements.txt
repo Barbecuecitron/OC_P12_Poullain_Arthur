@@ -2,3 +2,4 @@ django
 psycopg2
 djangorestframework
 dj-rest-auth
+django-filters

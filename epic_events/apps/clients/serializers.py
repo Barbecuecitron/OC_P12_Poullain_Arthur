@@ -13,8 +13,9 @@ class ClientSerializer(serializers.ModelSerializer):
             "email",
             "company_name",
             "phone",
+            "is_prospect"
         ]
-
+    read_only_fields = ("id",)
     sales_contact = serializers.SerializerMethodField("get_sales_contact_mail")
 
     def get_sales_contact_mail(self, obj):

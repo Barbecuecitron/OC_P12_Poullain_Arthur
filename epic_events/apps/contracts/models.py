@@ -9,6 +9,7 @@ class Contract(models.Model):
         to=Client,
         blank=False,
         on_delete=models.CASCADE,
+        limit_choices_to={"is_prospect":False}
     )
 
     sales_contact = models.ForeignKey(

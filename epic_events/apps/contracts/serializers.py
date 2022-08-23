@@ -1,8 +1,9 @@
 from .models import Contract
 from rest_framework import serializers
-
+from rest_framework.validators import ValidationError
 
 class ContractSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Contract
         fields = [
@@ -16,10 +17,11 @@ class ContractSerializer(serializers.ModelSerializer):
             "amount",
             "payment_due",
         ]
+        read_only_fields = ["id", "client", "client_name", "date_created"]
 
     sales_contact = serializers.SerializerMethodField("get_sales_contact_mail")
     client_name = serializers.SerializerMethodField("get_client_name")
-
+    
     def get_client_name(self, obj):
         prettified_payment = str(obj.payment_due).split(" ")[0]
         display_name = f"{obj.client} - {prettified_payment}"

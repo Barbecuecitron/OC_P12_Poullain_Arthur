@@ -23,8 +23,8 @@ class Event(models.Model):
         limit_choices_to={"usergroup": UserModel.UserGroup.SUPPORT},
     )
     event_status = models.BooleanField(default=False, verbose_name="Completed")
-    attendees = models.PositiveIntegerField()
-    event_date = models.DateTimeField()
+    attendees = models.PositiveIntegerField(default=1)
+    event_date = models.DateTimeField(blank=True)
     notes = models.TextField(null=True, blank=True)
 
     def __str__(self):
