@@ -5,14 +5,17 @@ from user_management.models import UserModel
 
 # Create your models here.
 class Event(models.Model):
+    
     contract = models.OneToOneField(
         to=Contract,
         on_delete=models.CASCADE,
         limit_choices_to={"status": "OPEN"},
-        related_name="event",
+        related_name="contract",
+        null=True,
+        blank=True,
     )
-    name = models.CharField(max_length=100, null=True, blank=True)
-    location = models.CharField(max_length=100, null=True, blank=True)
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     support_contact = models.ForeignKey(
@@ -23,7 +26,7 @@ class Event(models.Model):
         limit_choices_to={"usergroup": UserModel.UserGroup.SUPPORT},
     )
     event_status = models.BooleanField(default=False, verbose_name="Completed")
-    attendees = models.PositiveIntegerField(default=1)
+    attendees = models.PositiveIntegerField()
     event_date = models.DateTimeField(blank=True)
     notes = models.TextField(null=True, blank=True)
 

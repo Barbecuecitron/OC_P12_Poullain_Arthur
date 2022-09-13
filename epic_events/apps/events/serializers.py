@@ -12,4 +12,5 @@ class EventSerializer(serializers.ModelSerializer):
             "support_contact",
             "event_status",
             "id",
+            "contract"
         ]

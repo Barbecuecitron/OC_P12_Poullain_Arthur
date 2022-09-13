@@ -48,12 +48,27 @@ INSTALLED_APPS = [
 ]
 # LOGIN_REDIRECT_URL = "/clients/"
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {"class": "logging.StreamHandler"},
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+    }
+}
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
     ],
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    'DATETIME_FORMAT': "%m/%d/%Y %H:%M",
 }
 
 MIDDLEWARE = [
@@ -93,7 +108,7 @@ WSGI_APPLICATION = "project.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "epic_events_db",
+        "NAME": "db_epic_events_v2",
         "USER": "postgres",
         "PASSWORD": "admin",
         "HOST": "localhost",
